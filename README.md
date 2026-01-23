@@ -1,4 +1,3 @@
-```markdown
 # Accessible/Streamlined Prototyping Software
 
 **Research Application Project - Phase 1**
@@ -68,5 +67,3 @@ Maintain bidirectional real-time synchronization between the semantic prototype 
 - **Web Standards:** Integrate ARIA roles, semantic HTML, and accessibility APIs for assistive technology compatibility.
 
 ---
-
-```
