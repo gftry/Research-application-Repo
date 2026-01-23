@@ -1,4 +1,4 @@
-# Accessible/Streamlined Prototyping Software
+# Inclusive Prototyping Software
 
 **Research Application Project - Phase 1**
 
