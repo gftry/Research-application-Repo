@@ -1,6 +1,6 @@
 # Inclusive Prototyping Software
 
-**Research Application Project - Phase 1**
+**Research Application Project**
 
 ---
 
