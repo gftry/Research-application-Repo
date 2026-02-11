@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Figma Accessibility Auditor</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      width: 360px;
+      padding: 1rem;
+      background: #f9f9f9;
+    }
+    h1 { font-size: 1rem; margin-bottom: 0.5rem; }
+    label { display: block; font-size: 0.85rem; margin-top: 0.75rem; }
+    input {
+      width: 100%;
+      padding: 0.4rem;
+      font-size: 0.85rem;
+      box-sizing: border-box;
+      margin-top: 0.25rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      width: 100%;
+    }
+    #status {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #444;
+      white-space: pre-wrap;
+    }
+    #results {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Semantic Accessibility Auditor</h1>
+
+  <!-- INPUT: Figma credentials -->
+  <label for="tokenInput">Figma Personal Access Token</label>
+  <input type="password" id="tokenInput" placeholder="figd_a_Fp0B_a3rNdNkHo61RzL0_PpvA2P-QhLX1gPcqk 
+" aria-label="Figma Personal Access Token" />
+
+  <label for="fileKeyInput">Figma File Key</label>
+  <input type="text" id="fileKeyInput" placeholder="e.g. aBcDeFgHiJkL" aria-label="Figma File Key" />
+
+  <!-- ACTION -->
+  <button id="auditBtn" aria-label="Run accessibility audit on Figma file">
+    Run Audit
+  </button>
+
+  <!-- OUTPUT -->
+  <div id="status" role="status" aria-live="polite">
+    Enter your token and file key, then click Run Audit.
+  </div>
+
+  <div id="results" role="region" aria-label="Audit Results" hidden></div>
+
+  <!-- Module entry point -->
+  <script type="module" src="src/extension/popup.js"></script>
+</body>
+</html>

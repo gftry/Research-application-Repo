@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Semantic Accessibility Extension for Figma",
+  "version": "0.1.0",
+  "description": "Semantic, intent-driven accessibility layer for Figma prototypes.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://api.figma.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Figma Accessibility Auditor"
+  }
+}
