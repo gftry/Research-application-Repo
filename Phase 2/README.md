@@ -1,9 +1,5 @@
 # Figma Accessibility Extension
 
-**Semantic, intent-driven accessibility auditor for Figma prototypes**
-
-Built for blind and visually impaired designers to audit Figma files with full WCAG 2.2 compliance checking.
-
 ---
 
 ##  Quick Start
