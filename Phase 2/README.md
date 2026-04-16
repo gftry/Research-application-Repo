@@ -1,174 +1,304 @@
-# Semantic Accessibility Extension for Figma
+# Figma Accessibility Extension
 
-**Research Application Project — Phase 1**
+**Semantic, intent-driven accessibility auditor for Figma prototypes**
 
-**Repository:** [gftry/Research-application-Repo](https://github.com/gftry/Research-application-Repo)
-
----
-
-## Project Overview
-
-This project is a prototype browser extension and API integration layer designed to enhance accessibility in UI prototyping tools by introducing a semantic, intent-driven model that works alongside the Figma REST API to act as a semantic and accessibility middleware. The extension extracts structural information from Figma designs and enables screen reader navigation, keyboard-only traversal, and automated accessibility auditing. This prototype will show how accessibility can be embedded earlier in the SDLC during design and prototyping instead of being deferred to testing or development.
+Built for blind and visually impaired designers to audit Figma files with full WCAG 2.2 compliance checking.
 
 ---
 
-## Repository Structure
-
-```
-/figma-accessibility-extension
-│
-├── src/
-│   ├── api/
-│   │   └── figmaClient.js          
-# Figma API authentication and communication
-│   │
-│   ├── core/
-│   │   ├── UIComponent.js          
-# Abstract base class for all UI components
-│   │   ├── Button.js              
-# Concrete component — interactive triggers
-│   │   ├── InputField.js           
-# Concrete component — text entry nodes
-│   │   └── NavigationRegion.js     
-# Concrete component — navigation landmarks
-│   │
-│   ├── semantic/
-│   │   └── SemanticTree.js         
-# Converts Figma nodes into component objects
-│   │
-│   ├── accessibility/
-│   │   ├── ScreenReaderService.js  
-# Depth-first reading order output
-│   │   ├── KeyboardNavigator.js    
-# Focusable element tab-order builder
-│   │   └── AuditService.js        
-# Rule-based accessibility checks
-│   │
-│   └── extension/
-│       └── popup.js                
-# Wires services together AKA extension entry point
-│
-├── tests/
-│   ├── semanticTree.test.js        
-# Tests for SemanticTree and core component classes
-│   └── accessibility.test.js      
-# Tests  ScreenReader, KeyboardNav, AuditService
-│
-├── docs/
-│   └── design-notes.md            
-# Architecture decisions and design rationale
-│
-├── popup.html                      
-# Extension popup UI / Live Server entry point
-├── manifest.json                   
-# Browser extension manifest (Manifest V3)
-└── README.md
-```
-
----
-
-## Initialisation
-
-### Prerequisites
-
-Ensure the following are installed before running anything:
-
-- [Node.js](https://nodejs.org) v18 or higher
-- [VS Code](https://code.visualstudio.com)
-- VS Code extension: **Live Server** (by Ritwick Dey)
-- A free [Figma account](https://figma.com) with at least one file created
-
----
-
-### Step 1 — Clone and Open the Project
+##  Quick Start
 
 ```bash
+# 1. Clone and setup
 git clone https://github.com/gftry/Research-application-Repo.git
 cd Research-application-Repo
-code .
+npm run setup
+
+# 2. Add your Figma credentials to .env
+# Edit .env and add:
+#   FIGMA_PERSONAL_ACCESS_TOKEN=your-token
+#   FIGMA_FILE_KEY=your-file-key
+
+# 3. Run your first audit
+npm run audit
+
+# 4. View HTML report
+open output/audit-report.html
 ```
 
 ---
 
-### Step 2 — Get Your Figma Credentials
+## Prerequisites
 
-You need two values before the extension can connect to Figma: Personal Access Token & the File key.
+- **Node.js** v18 or higher
+- **Figma account** (free) with at least one design file
+- **Personal Access Token** from Figma Settings
 
 ---
 
-### Step 3 — Install Dependencies (for tests only)
+## Installation
 
-The extension itself has no runtime dependencies. Jest is needed for running tests.
+### Step 1: Install Dependencies
 
 ```bash
-npm init -y
-npm install --save-dev jest
+npm install
 ```
 
-Then add the following to your `package.json`:
-
-```json
-"scripts": {
-  "test": "node --experimental-vm-modules node_modules/.bin/jest"
-},
-"type": "module"
-```
-
----
-
-### Step 4 — Run the Prototype via Live Server
-
-1.  Right-click anywhere in the file → **Open with Live Server**
-2. Your browser opens at `http://localhost/popup.html`
-3. Paste your **Figma Personal Access Token** into the first field
-4. Paste your **Figma File Key** into the second field
-5. Click **Run Audit**
-
----
-
-### Step 5 — Load it as a Browser Extension
-
-1. Open Chrome and go to `chrome://extensions`
-2. Enable **Developer mode** (top-right toggle)
-3. Click **Load unpacked**
-4. Select the root folder of this project (where `manifest.json` lives)
-5. The extension icon appears in your toolbar
-6. Click it to open the popup and follow Step 4 above
-
----
-
-### Step 6 — Run the Tests
+### Step 2: Configure Credentials
 
 ```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env with your credentials
+nano .env  # or use any text editor
+```
+
+**Required .env values:**
+
+```bash
+FIGMA_PERSONAL_ACCESS_TOKEN=figd_xxxxxxxxxxxxxxxxxxxx
+FIGMA_FILE_KEY=aBcDeFgHiJkLmNoPqRsT
+```
+
+**Get your Personal Access Token:**
+1. Go to https://www.figma.com/settings
+2. Scroll to "Personal Access Tokens"
+3. Click "Generate new token"
+4. Copy the token (you won't see it again!)
+
+**Get your File Key:**
+1. Open any Figma file
+2. Look at the URL: `figma.com/file/YOUR_KEY_HERE/file-name`
+3. Copy the string between `/file/` and the next `/`
+
+### Step 3: Validate Configuration
+
+```bash
+npm run validate
+```
+
+If all checks pass, we ait!
+
+---
+
+## Usage
+
+### Run Accessibility Audit
+
+```bash
+# Basic audit (prints to console)
+npm run audit
+
+# Generate HTML report
+npm run audit:html
+
+# Generate JSON report
+npm run audit:json
+
+# Generate both reports
+npm run audit:all
+```
+
+### Generate Extension Manifest
+
+```bash
+npm run manifest
+```
+
+This creates `manifest.json` from your .env configuration.
+
+### Run Tests
+
+```bash
+# Run all tests
 npm test
+
+# Run tests in watch mode (for development)
+npm test:watch
+
+# Generate coverage report
+npm test:coverage
 ```
 
-Expected output:
-
-```
-PASS  tests/semanticTree.test.js
-PASS  tests/accessibility.test.js
-
-Test Suites: 2 passed, 2 total
-Tests:       XX passed, XX total
-```
-
-To run a single test file:
+### Development Mode
 
 ```bash
-node --experimental-vm-modules node_modules/.bin/jest tests/semanticTree.test.js
+# Generate manifest + start live server
+npm run dev
+```
+
+Opens popup.html at http://localhost:5500
+
+### Full Build Pipeline
+
+```bash
+# Generate manifest + run audit + run tests
+npm run build
 ```
 
 ---
 
-## APIs Used
+## Output Files
 
-1. Figma REST API - Fetch design nodes and metadata
-2. axe-core - Accessibility auditing engine 
-3. Lighthouse - Automated audit pipeline 
-4. WAVE API - Accessibility reporting
-5. Jest - Unit testing framework
+All generated files are saved to `output/` (git-ignored):
 
-All current dependencies are open-source or publicly available.
+| File | Description |
+|------|-------------|
+| `audit-report.json` | Machine-readable audit results |
+| `audit-report.html` | Visual WCAG compliance report |
+| `wcag-summary.txt` | Plain text summary |
+
+---
+
+## Testing
+
+### Test Structure
+
+```
+tests/
+├── semanticTree.test.js      # Core component tests
+├── accessibility.test.js     # Accessibility service tests
+├── integration.test.js       # Full workflow tests
+└── setup.js                  # Mock Figma API responses
+```
+
+### Run Specific Tests
+
+```bash
+# Run only semantic tree tests
+npx jest tests/semanticTree.test.js
+
+# Run only integration tests
+npx jest tests/integration.test.js
+```
+
+### Test Coverage
+
+```bash
+npm run test:coverage
+```
+
+Target coverage: **80%** for lines, functions, statements
+
+---
+
+## npm Scripts Reference
+
+| Command | Description |
+|---------|-------------|
+| `npm run setup` | Initial setup (install + create .env) |
+| `npm run validate` | Check .env configuration |
+| `npm run manifest` | Generate manifest.json |
+| `npm run audit` | Run accessibility audit (console output) |
+| `npm run audit:html` | Run audit + generate HTML report |
+| `npm run audit:json` | Run audit + generate JSON report |
+| `npm run audit:all` | Run audit + generate all reports |
+| `npm test` | Run test suite |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run test:coverage` | Generate coverage report |
+| `npm run build` | Full build pipeline (manifest + audit + tests) |
+| `npm run dev` | Development mode (manifest + live server) |
+
+---
+
+## What Gets Audited
+
+### WCAG 2.2 Compliance Levels
+
+**Level A (Critical — Legal Requirement):**
+- All components have accessible labels
+- All components declare ARIA roles
+- Interactive elements are keyboard focusable
+
+**Level AA (Important — Usability):**
+- Focus order is logical
+- Labels are descriptive
+- Button purposes are clear
+
+**Level AAA (Best Practice — Optimal):**
+- Components provide sufficient context
+- Consistent identification across similar elements
+- Rich positional and hierarchical context
+
+### Screen Reader Output
+
+For each component, the auditor generates announcements like:
+
+```
+Button, "Submit" (primary action button) enabled.
+Located in bottom-right of "Login Form" region.
+Press Enter or Space to activate.
+```
+
+---
+
+## Example .env Configuration
+
+```bash
+# Figma API Credentials
+FIGMA_PERSONAL_ACCESS_TOKEN=figd_1234567890abcdefghijklmnopqrstuvwxyz
+FIGMA_FILE_KEY=aBcDeFgHiJkLmNoPqRsTuVwXyZ
+
+# Extension Metadata
+EXTENSION_NAME=Figma Accessibility Auditor
+EXTENSION_VERSION=0.2.0
+EXTENSION_DESCRIPTION=WCAG 2.2 compliance checker for Figma prototypes
+
+# Audit Configuration
+INCLUDE_GEOMETRY=true
+RATE_LIMIT_REQUESTS_PER_MINUTE=50
+
+# Output Settings
+OUTPUT_DIR=./output
+GENERATE_HTML_REPORT=true
+GENERATE_JSON_REPORT=true
+```
+
+---
+
+## Troubleshooting
+
+### "Missing required environment variables"
+
+**Solution:** Run `npm run validate` to check which variables are missing.
+
+### "Figma API: Invalid or expired token"
+
+**Solutions:**
+1. Generate a new token at https://www.figma.com/settings
+2. Ensure you copied the full token (starts with `figd_`)
+3. Check for extra spaces in .env
+
+### "No accessible components detected"
+
+**Causes:**
+- File contains only visual elements (no interactive components)
+- Components don't follow naming conventions
+- File is empty
+
+**Solution:** Add interactive elements (buttons, inputs, navigation) to your Figma file
+
+### "Rate limit exceeded"
+
+**Solution:** Wait 60 seconds, then retry. Reduce `RATE_LIMIT_REQUESTS_PER_MINUTE` in .env.
+
+---
+
+## License
+
+MIT License - see LICENSE file for details
+
+---
+
+## Acknowledgments
+
+Built with accessibility-first principles for blind and visually impaired designers.
+
+WCAG 2.2 guidelines: https://www.w3.org/WAI/WCAG22/quickref/
+
+Screen reader resources:
+- https://usabilitygeek.com/10-free-screen-reader-blind-visually-impaired-users/
+- https://www.nvaccess.org/ (NVDA screen reader)
 
 ---
