@@ -1,0 +1,43 @@
+{
+  "name": "figma-accessibility-extension",
+  "version": "0.2.0",
+  "description": "Semantic accessibility auditor for Figma prototypes",
+  "type": "module",
+  "main": "src/extension/popup.js",
+  "scripts": {
+    "setup": "npm install && cp .env.example .env && echo '\n✓ Setup complete! Edit .env with your Figma credentials.'",
+    "manifest": "node config/generate.js",
+    "audit": "node scripts/runAudit.js",
+    "audit:html": "node scripts/runAudit.js --html",
+    "audit:json": "node scripts/runAudit.js --json",
+    "audit:all": "node scripts/runAudit.js --html --json",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test:watch": "node --experimental-vm-modules node_modules/.bin/jest --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
+    "build": "npm run manifest && npm run audit:all && npm run test",
+    "dev": "npm run manifest && npx live-server --port=5500 --open=popup.html",
+    "validate": "node scripts/validEnv.js"
+  },
+  "keywords": [
+    "figma",
+    "accessibility",
+    "a11y",
+    "wcag",
+    "screen-reader",
+    "blind",
+    "visually-impaired"
+  ],
+  "author": "Your Team",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "jest": "^29.7.0",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
